@@ -1,12 +1,8 @@
 import asyncio
-import json
-import time
 from random import random
 from typing import List
 
 import httpx
-
-from hnreader.task_manager.utils import get_http_client
 
 
 async def get_item_by_id(item_id: int, client: httpx.AsyncClient):
@@ -28,7 +24,8 @@ async def traverse_item(item_id: int, client: httpx.AsyncClient, depth=0):
         return node
 
     kids = node.get('kids', [])
-    node['kids'] = await parse_item_array(kids, client)
+    tasks = [traverse_item(i, client, depth - 1) for i in kids]
+    node['kids'] = await asyncio.gather(*tasks)
 
     return node
 
@@ -49,14 +46,17 @@ async def traverse_user_data(user_id: str, client: httpx.AsyncClient):
 
 async def get_top_stories(client: httpx.AsyncClient) -> List[int]:
     response = await client.get("/topstories.json")
+    response.raise_for_status()
     return response.json()
 
 
 async def get_new_stories(client: httpx.AsyncClient) -> List[int]:
     response = await client.get("/newstories.json")
+    response.raise_for_status()
     return response.json()
 
 
 async def get_best_stories(client: httpx.AsyncClient) -> List[int]:
     response = await client.get("/beststories.json")
+    response.raise_for_status()
     return response.json()
