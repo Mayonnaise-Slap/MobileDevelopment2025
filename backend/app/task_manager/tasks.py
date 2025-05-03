@@ -3,9 +3,8 @@ import asyncio
 from app.db.session import get_session
 from app.repository import insert_item
 from app.task_manager.hn_client import get_new_stories, parse_item_array
-from celery import shared_task
-
 from app.task_manager.utils import get_http_client
+from celery import shared_task
 
 
 @shared_task

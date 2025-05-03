@@ -10,6 +10,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 def convert_unix_time(unix_time: int) -> datetime:
     return datetime.fromtimestamp(unix_time)
 
+
 # TODO add function to create or update object
 
 async def insert_item(item: dict, session: AsyncSession):

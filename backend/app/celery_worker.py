@@ -1,5 +1,5 @@
-from celery import Celery
 from app.task_manager.scheduler import beat_schedule
+from celery import Celery
 
 celery_app = Celery(
     "worker",

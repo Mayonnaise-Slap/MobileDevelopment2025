@@ -6,8 +6,8 @@ import pytest
 import respx
 from httpx import Response
 
-from hnreader.task_manager.hn_client import get_http_client, get_item_by_id, traverse_item
-
+from hnreader.app.task_manager.hn_client import get_item_by_id, traverse_item
+from hnreader.app.task_manager.utils import get_http_client
 
 base_path = Path(__file__).parent
 
