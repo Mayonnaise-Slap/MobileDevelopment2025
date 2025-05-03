@@ -7,6 +7,7 @@ from sqlmodel import Field, SQLModel
 
 class Story(SQLModel, table=True):
     __tablename__ = "stories"
+    __table_args__ = {'extend_existing': True}
     id: int = Field(primary_key=True)
     by: Optional[str]
     time: datetime
@@ -20,6 +21,7 @@ class Story(SQLModel, table=True):
 
 class Comment(SQLModel, table=True):
     __tablename__ = "comments"
+    __table_args__ = {'extend_existing': True}
     id: int = Field(primary_key=True)
     by: Optional[str]
     time: datetime

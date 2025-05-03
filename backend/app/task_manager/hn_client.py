@@ -29,6 +29,18 @@ async def traverse_item(item_id: int, client: httpx.AsyncClient, depth=0):
 
     return node
 
+async def traverse_item_to_array(item_id: int, client: httpx.AsyncClient, depth=0):
+    node = await get_item_by_id(item_id, client)
+    items = [node]
+
+    if depth == 0:
+        return items
+
+    kids = node.get('kids', [])
+    tasks = [traverse_item_to_array(i, client, depth - 1) for i in kids]
+    items.extend(sum(await asyncio.gather(*tasks, return_exceptions=False), []))
+
+    return items
 
 async def get_user_data(user_id: str, client: httpx.AsyncClient):
     response = await client.get(f"/user/{user_id}.json")

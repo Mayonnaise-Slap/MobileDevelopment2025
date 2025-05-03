@@ -1,14 +1,12 @@
 from contextlib import asynccontextmanager
 
-from app.db.session import get_session, init_db
-from app.models import Story, Comment
-from app.repository import convert_unix_time
-from app.repository import fetch_or_get_item
-from app.task_manager.hn_client import get_item_by_id
-from app.task_manager.utils import get_http_client
 from fastapi import APIRouter, Depends
 from fastapi import FastAPI
+from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.db.session import get_session, init_db
+from app.repository import cached_fetch_or_get_item, fetch_story_comments
 
 
 @asynccontextmanager
@@ -25,12 +23,25 @@ async def root():
     return {"message": "Hello from FastAPI with async DB!"}
 
 
+@app.get("/health")
+async def health_check(session: AsyncSession = Depends(get_session)):
+    try:
+        await session.execute(text("select 1"))
+        return {"status": "ok"}
+    except Exception as e:
+        return {"status": "error", "details": str(e)}
+
+
 router = APIRouter()
 
 
 @router.get("/items/{item_id}")
 async def test_get_item(item_id: int, session: AsyncSession = Depends(get_session)):
-    return await fetch_or_get_item(item_id, session)
+    return await cached_fetch_or_get_item(item_id, session)
 
+
+@router.get("/items/{item_id}/recursive")
+async def test_get_item_recursive(item_id: int, session: AsyncSession = Depends(get_session)):
+    return await fetch_story_comments(item_id, session)
 
 app.include_router(router)
