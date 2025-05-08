@@ -8,15 +8,7 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @State private var dummyNews: [NewsItem] = (0..<6).map { index in
-        NewsItem(
-            title: "Новость \(index + 1)",
-            author: "Автор \(index + 1)",
-            date: "00.00.000\(index)",
-            rating: Int.random(in: 0...100),
-            isFavorite: false
-        )
-    }
+    @StateObject private var favoritesService = FilterFavoritesService()
 
     var body: some View {
         NavigationView {
@@ -27,19 +19,18 @@ struct FavoritesView: View {
                     .font(.title2)
                     .bold()
                     .padding(.top)
+                
+                FilterFavoritesView(sortOption: $favoritesService.sortOptions)
 
                 ScrollView {
                     VStack(spacing: 12) {
-                        ForEach($dummyNews) { $item in
-                            NewsRowView(item: $item)
-                        }
+                        ForEach(favoritesService.filterFavoritesIndices, id: \.self) { index in
+                                                    NewRowView(item: $favoritesService.news[index])
+                                                }
                     }
                     .padding(.horizontal)
                 }
-
-                Spacer()
             }
-            .navigationBarHidden(true)
         }
     }
 }

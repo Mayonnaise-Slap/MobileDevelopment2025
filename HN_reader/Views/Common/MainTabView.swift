@@ -18,6 +18,10 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Избранное", systemImage: "star.fill")
                 }
+            RecommendationsView()
+                .tabItem {
+                    Label("Рекомендации", systemImage: "hand.raised.fill")
+                }
         }
     }
 }

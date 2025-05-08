@@ -10,16 +10,22 @@ import SwiftUI
 struct HeaderView: View {
     var body: some View {
         HStack {
-            Image("logo1")
+            Image("HN_logo")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 100)
+                .frame(width: 125)
+                .padding(.leading, 30)
             Spacer()
-            Image(systemName: "person.circle")
+            NavigationLink(destination: AccountView()) {
+                Image(systemName: "person.crop.circle")
                 .font(.title2)
+                .foregroundColor(Color("Icon"))
+                .padding(.trailing, 30)
+            }
         }
+        .padding(.vertical, 15)
         Divider()
-        .background(Color(uiColor: #colorLiteral(red: 0.9777966142, green: 0.3477782011, blue: 0.05399081856, alpha: 1)))
-        .padding()
+            .frame(height: 3)
+            .background(Color("Main"))
     }
 }

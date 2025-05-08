@@ -1,13 +1,13 @@
 //
-//  NewsView.swift
+//  RecommendationsView.swift
 //  HN_reader
 //
-//  Created by MpAsSgHA on 24.04.2025.
+//  Created by MpAsSgHA on 08.05.2025.
 //
 
 import SwiftUI
 
-struct NewsView: View {
+struct RecommendationsView: View {
 
     @StateObject private var newsService = FilterSortNewsService()
 
@@ -16,7 +16,7 @@ struct NewsView: View {
             VStack {
                 HeaderView()
 
-                Text("Последние новости")
+                Text("Рекомендации")
                     .font(.title2)
                     .bold()
                     .padding(.top)
@@ -36,4 +36,3 @@ struct NewsView: View {
         }
     }
 }
-

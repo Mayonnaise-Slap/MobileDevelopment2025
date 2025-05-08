@@ -6,26 +6,27 @@
 //
 import SwiftUI
 
-struct NewsRowView: View {
-    @Binding var item: NewsItem
+struct NewRowView: View {
+    @Binding var item: News
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                NavigationLink(destination: NewsDetailView(item: item)) {
+            VStack(alignment: .leading, spacing: 5) {
+                NavigationLink(destination: NewsDetailView(item: $item)) {
                     Text(item.title)
                         .font(.headline)
                         .foregroundColor(.primary)
                     Image(systemName: "info.circle")
+                        .foregroundColor(Color("Icon"))
                 }
                 Text("Автор: \(item.author)")
                     .font(.caption)
                 Text(item.date)
                     .font(.caption2)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("Divider"))
                 Text("Рейтинг: \(item.rating)")
                     .font(.caption2)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("Divider"))
             }
             Spacer()
             Button(action: {

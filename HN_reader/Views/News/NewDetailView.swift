@@ -7,31 +7,70 @@
 
 import SwiftUI
 
+
 struct NewsDetailView: View {
-    let item: NewsItem
+    @Binding var item: News
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(item.title)
-                .font(.title)
-                .bold()
-
+        VStack() {
+            HeaderView()
             HStack {
-                Text("Автор: \(item.author)")
-                    .font(.subheadline)
+                Button(action: {
+                    dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.backward")
+                        Text("Назад")
+                    }
+                    .foregroundColor(Color(uiColor: #colorLiteral(red: 0.9777966142, green: 0.3477782011, blue: 0.05399081856, alpha: 1)))
+                    .font(.caption)
+                }
                 Spacer()
-                Text(item.date)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
             }
+            .padding([.horizontal, .top])
 
-            Text("Рейтинг: \(item.rating)")
-                .font(.body)
+            VStack(alignment: .leading, spacing: 15) {
+                HStack {
+                    Text(item.title)
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    Button(action: {
+                        item.isFavorite.toggle()
+                    }) {
+                        Image(systemName: item.isFavorite ? "star.fill" : "star")
+                            .foregroundColor(.orange)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                
+                HStack {
+                    Text("Автор: \(item.author)")
+                        .font(.caption)
+                    Spacer()
+                    Text(item.date)
+                        .font(.caption)
+                    Spacer()
+                    Text("Рейтинг: \(item.rating)")
+                        .font(.caption)
+                }
+                .foregroundColor(Color("Divider"))
+                
 
-            Spacer()
+                Divider()
+                    .frame(height: 2)
+                    .background((Color("Divider")))
+
+                Text("Комментарии:")
+                    .font(.body)
+                    .bold()
+
+                CommentsView()
+            }
+            .padding()
         }
-        .padding()
-        .navigationTitle("Подробности")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
     }
 }
+
