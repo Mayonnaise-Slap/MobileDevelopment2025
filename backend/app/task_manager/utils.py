@@ -18,7 +18,7 @@ logging.basicConfig(
 @asynccontextmanager
 async def get_http_client():
     try:
-        async with httpx.AsyncClient(base_url=API_BASE_URL, timeout=10) as client:
+        async with httpx.AsyncClient(base_url=API_BASE_URL, timeout=60) as client:
             yield client
     finally:
         await client.aclose()

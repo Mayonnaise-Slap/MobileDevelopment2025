@@ -4,11 +4,18 @@ from typing import List
 
 import httpx
 
+sem = asyncio.Semaphore(10)
+
 
 async def get_item_by_id(item_id: int, client: httpx.AsyncClient):
-    await asyncio.sleep(random() / 10)
-    response = await client.get(f"/item/{item_id}.json")
-    return response.json()
+    await asyncio.sleep(random()/10)
+    async with sem:
+        try:
+            response = await client.get(f"/item/{item_id}.json")
+            return response.json()
+        except Exception as e:
+            print(e)
+            return None
 
 
 async def parse_item_array(items: List[int], client: httpx.AsyncClient):
