@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Optional, List
 
-from sqlalchemy import Column, JSON
+from sqlalchemy import Column, JSON, Integer
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlmodel import Field, SQLModel
 
 
@@ -29,3 +30,11 @@ class Comment(SQLModel, table=True):
 
     text: Optional[str]
     parent: Optional[int]
+
+
+class ListHolder(SQLModel, table=True):
+    __tablename__ = "list_holder"
+    __table_args__ = {'extend_existing': True}
+    id: int | None = Field(default=None, primary_key=True)
+    new_ids: list[int] = Field(sa_column=Column(ARRAY(Integer)))
+    trending_ids: list[int] = Field(sa_column=Column(ARRAY(Integer)))

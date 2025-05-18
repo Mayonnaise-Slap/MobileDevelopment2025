@@ -2,11 +2,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, Depends
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.db.session import get_session, init_db
-from app.repository import cached_fetch_or_get_item, fetch_story_comments
+from app.repository import ProjectRepository
 
 
 @asynccontextmanager
@@ -24,24 +25,39 @@ async def root():
 
 
 @app.get("/health")
-async def health_check(session: AsyncSession = Depends(get_session)):
+async def health_check(session: Depends = Depends(get_session)):
     try:
         await session.execute(text("select 1"))
-        return {"status": "ok"}
+        return JSONResponse({"status": "ok"}, 200)
     except Exception as e:
-        return {"status": "error", "details": str(e)}
+        return JSONResponse({"status": "error", "details": str(e)}, 500)
 
 
-router = APIRouter()
+router_v1 = APIRouter(prefix='/api/v1')
 
 
-@router.get("/items/{item_id}")
-async def test_get_item(item_id: int, session: AsyncSession = Depends(get_session)):
-    return await cached_fetch_or_get_item(item_id, session)
+@router_v1.get("/items/{item_id}")
+async def get_item(item_id: int, session: AsyncSession = Depends(get_session)):
+    return await ProjectRepository().get_story(session, item_id)
 
 
-@router.get("/items/{item_id}/recursive")
-async def test_get_item_recursive(item_id: int, session: AsyncSession = Depends(get_session)):
-    return await fetch_story_comments(item_id, session)
+@router_v1.get("/items/{item_id}/recursive")
+async def get_item_recursive(item_id: int, session: AsyncSession = Depends(get_session)):
+    return await ProjectRepository().load_thread(session, item_id)
 
-app.include_router(router)
+
+@router_v1.get("/topstories")
+async def get_top_stories(session: AsyncSession = Depends(get_session)):
+    return await ProjectRepository().get_top_stories(session)
+
+
+@router_v1.get("/newstories")
+async def get_new_stories(session: AsyncSession = Depends(get_session)):
+    return await ProjectRepository().get_new_stories(session)
+
+
+# TODO check if tasks can run
+# TODO add list views for posts to optimize db connections
+# TODO add fun stuff
+
+app.include_router(router_v1)
