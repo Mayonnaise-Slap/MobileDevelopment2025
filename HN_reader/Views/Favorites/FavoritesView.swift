@@ -11,7 +11,7 @@ struct FavoritesView: View {
     @StateObject private var favoritesService = FilterFavoritesService()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 HeaderView()
 
@@ -23,7 +23,7 @@ struct FavoritesView: View {
                 FilterFavoritesView(sortOption: $favoritesService.sortOptions)
 
                 ScrollView {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 15) {
                         ForEach(favoritesService.filterFavoritesIndices, id: \.self) { index in
                                                     NewRowView(item: $favoritesService.news[index])
                                                 }
@@ -31,6 +31,7 @@ struct FavoritesView: View {
                     .padding(.horizontal)
                 }
             }
+            .navigationBarHidden(true)
         }
     }
 }
