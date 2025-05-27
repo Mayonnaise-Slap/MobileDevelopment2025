@@ -37,11 +37,6 @@ router_v1 = APIRouter(prefix='/api/v1')
 
 
 @router_v1.get("/items/{item_id}")
-async def get_item(item_id: int, session: AsyncSession = Depends(get_session)):
-    return await ProjectRepository().get_story(session, item_id)
-
-
-@router_v1.get("/items/{item_id}/recursive")
 async def get_item_recursive(item_id: int, session: AsyncSession = Depends(get_session)):
     return await ProjectRepository().load_thread(session, item_id)
 
@@ -56,7 +51,6 @@ async def get_new_stories(session: AsyncSession = Depends(get_session)):
     return await ProjectRepository().get_new_stories(session)
 
 
-# TODO check if tasks can run
 # TODO add list views for posts to optimize db connections
 # TODO add fun stuff
 
