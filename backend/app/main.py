@@ -56,7 +56,6 @@ async def get_new_stories(session: AsyncSession = Depends(get_session)):
     return await ProjectRepository().get_new_stories(session)
 
 
-# TODO check if tasks can run
 # TODO add list views for posts to optimize db connections
 # TODO add fun stuff
 
