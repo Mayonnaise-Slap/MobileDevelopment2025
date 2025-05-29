@@ -12,10 +12,10 @@ struct NewsView: View {
     @StateObject private var newsService = FilterSortNewsService()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 HeaderView()
-
+                
                 Text("Последние новости")
                     .font(.title2)
                     .bold()

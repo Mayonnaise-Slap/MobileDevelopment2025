@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NewsView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabView()
+        AuthView()
     }
 }
  
