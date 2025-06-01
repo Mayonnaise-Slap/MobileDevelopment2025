@@ -17,11 +17,12 @@ struct CommentsRowView: View {
                     .font(.caption2)
                     .foregroundColor(Color("Main"))
                 Spacer()
-                Text((item.text))
+                Text(item.text)
                     .font(.caption2)
-                }
-            .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, CGFloat(item.depth * 15))  // Отступ по глубине
+        }
         .padding()
         .background(RoundedRectangle(cornerRadius: 10).stroke(Color("Divider")))
     }

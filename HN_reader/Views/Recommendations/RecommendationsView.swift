@@ -26,7 +26,7 @@ struct RecommendationsView: View {
                 ScrollView {
                     VStack(spacing: 15) {
                         ForEach(newsService.filteredAndSortedIndices, id: \.self) { index in
-                                                    NewRowView(item: $newsService.news[index])
+                                                    NewsRowView(item: $newsService.news[index])
                                                 }
                     }
                     .padding(.horizontal)

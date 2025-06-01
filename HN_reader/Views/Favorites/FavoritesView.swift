@@ -25,7 +25,7 @@ struct FavoritesView: View {
                 ScrollView {
                     VStack(spacing: 15) {
                         ForEach(favoritesService.filterFavoritesIndices, id: \.self) { index in
-                                                    NewRowView(item: $favoritesService.news[index])
+                            NewsRowView(item: $favoritesService.news[index])
                                                 }
                     }
                     .padding(.horizontal)

@@ -1,18 +1,14 @@
-//
-//  NewsRowView.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 24.04.2025.
-//
+// NewsRowView.swift
+
 import SwiftUI
 
-struct NewRowView: View {
+struct NewsRowView: View {
     @Binding var item: News
 
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 5) {
-                NavigationLink(destination: NewsDetailView(item: $item)) {
+                NavigationLink(destination: NewDetailView(item: $item, storyId: item.id)) {
                     Text(item.title)
                         .font(.headline)
                         .foregroundColor(.primary)
@@ -42,4 +38,8 @@ struct NewRowView: View {
     }
 }
 
-
+struct NewsRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        NewsRowView(item: .constant(News(id: 1, title: "Новость 1", author: "Автор 1", date: "00.00.0001", rating: 5, isFavorite: false)))
+    }
+}

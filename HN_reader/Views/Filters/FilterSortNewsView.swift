@@ -1,52 +1,58 @@
-//
-//  FiltersView.swift
+
+//  FilterSortNewsView.swift
 //  HN_reader
 //
-//  Created by MpAsSgHA on 24.04.2025.
+//  Created by MpAsSgHA on 30.05.2025.
 //
 
 import SwiftUI
-
 
 struct FilterSortNewsView: View {
     @Binding var sortOption: SortOptions
     @Binding var filterOption: FilterOptions
     
-    
     var body: some View {
-        HStack {
-            Menu {
-                ForEach(FilterOptions.allCases, id: \.self) { option in
-                    Button(action: {
-                        filterOption = option
-                    }) {
-                        Label(option.rawValue,  systemImage: filterIconName(for: option))
+        VStack {
+            Text("Сортировка и фильтрация")
+                .font(.title)
+                .padding()
+            
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Сортировать по:")
+                    .font(.headline)
+                
+                Picker("Сортировка", selection: $sortOption) {
+                    ForEach(SortOptions.allCases, id: \.self) { option in
+                        Text(option.rawValue)
+                            .tag(option)
                     }
                 }
-            } label: {
-                Label("Фильтры", systemImage: "line.3.horizontal.decrease.circle")
-                    .padding(5)
-                    .background(Color("Main"))
-                    .foregroundColor(.white)
-                    .cornerRadius(5)
-            }
-
-            Menu {
-                ForEach(SortOptions.allCases, id: \.self) { option in
-                    Button(action: {
-                        sortOption = option
-                    }) {
-                        Label(option.rawValue,  systemImage: sortIconName(for: option))
+                .pickerStyle(SegmentedPickerStyle())
+                
+                Text("Фильтровать по:")
+                    .font(.headline)
+                
+                Picker("Фильтр", selection: $filterOption) {
+                    ForEach(FilterOptions.allCases, id: \.self) { option in
+                        Text(option.rawValue)
+                            .tag(option)
                     }
                 }
-            } label: {
-                Label("Сортировка", systemImage: "arrow.up.arrow.down")
-                    .padding(5)
-                    .background(Color("Main"))
-                    .foregroundColor(.white)
-                    .cornerRadius(5)
+                .pickerStyle(SegmentedPickerStyle())
             }
+            .padding()
+            
+            Spacer()
         }
-        .padding(.bottom, 30)
+        .navigationTitle("Фильтры")
     }
 }
+
+struct FilterSortNewsView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            FilterSortNewsView(sortOption: .constant(.all), filterOption: .constant(.all))
+        }
+    }
+}
+

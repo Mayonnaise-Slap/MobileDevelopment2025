@@ -1,15 +1,13 @@
-//
-//  Comment.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 06.05.2025.
-//
+
+// Comments.swift
 
 import Foundation
 
 struct Comments: Identifiable {
-    let id = UUID()
+    let id: Int
     let author: String
     let date: String
     let text: String
+    let depth: Int  // Уровень вложенности комментария
 }
+

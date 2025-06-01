@@ -1,16 +1,16 @@
-//
-//  ContentView.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 24.04.2025.
-//
-
 import SwiftUI
 
-
-struct NewsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthView()
+struct ContentView: View {
+    @StateObject private var authViewModel = AuthViewModel()
+    var body: some View {
+        NavigationView {
+            VStack {
+                AuthView() // без передачи viewModel напрямую!
+                Divider().padding(.vertical)
+                NewsView()
+            }
+            .navigationTitle("Главная")
+        }
+        .environmentObject(authViewModel) // <- ключевая строка!
     }
 }
- 

@@ -1,4 +1,4 @@
-//
+
 //  LoginRegisterService.swift
 //  HN_reader
 //
@@ -16,7 +16,7 @@ class AuthViewModel: ObservableObject {
     @Published var success: Bool = false
     
     @Published private(set) var registeredUsers: [User] = [
-        User(email: "Test@example.com", nickname: "test", password: "12345")
+        User(id: 1, email: "Test@example.com", nickname: "test", password: "12345")
     ]
     
     func login() {
@@ -28,7 +28,7 @@ class AuthViewModel: ObservableObject {
         
         if let user = registeredUsers.first(where: { $0.email.lowercased() == email.lowercased() }) {
             if user.password == password {
-                message = "Успешный вход, привет \(user.nickname)!"
+                message = "Успешный вход, привет $user.nickname)!"
                 success = true
             } else {
                 message = "Неверный пароль"
@@ -51,7 +51,7 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        let newUser = User(email: email, nickname: nickname, password: password)
+        let newUser = User(id: registeredUsers.count + 1, email: email, nickname: nickname, password: password)
         registeredUsers.append(newUser)
         message = "Регистрация прошла успешно"
         clearFields()
@@ -69,3 +69,4 @@ class AuthViewModel: ObservableObject {
         message = ""
     }
 }
+

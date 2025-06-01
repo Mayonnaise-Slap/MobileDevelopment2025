@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.db.session import get_session, init_db
 from app.repository import ProjectRepository
 
@@ -17,7 +17,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Для разработки
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():

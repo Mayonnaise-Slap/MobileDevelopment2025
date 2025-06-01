@@ -1,76 +1,60 @@
-//
-//  NewDateilView.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 26.04.2025.
-//
+
+// NewDetailView.swift
 
 import SwiftUI
 
-
-struct NewsDetailView: View {
+struct NewDetailView: View {
     @Binding var item: News
-    @Environment(\.dismiss) var dismiss
+    let storyId: Int
+
+    init(item: Binding<News>, storyId: Int) {
+        self._item = item
+        self.storyId = storyId
+    }
 
     var body: some View {
-        VStack() {
-            HeaderView()
+        VStack(alignment: .leading, spacing: 20) {
             HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.backward")
-                        Text("Назад")
-                    }
-                    .foregroundColor(Color(uiColor: #colorLiteral(red: 0.9777966142, green: 0.3477782011, blue: 0.05399081856, alpha: 1)))
-                    .font(.caption)
-                }
-                Spacer()
-            }
-            .padding([.horizontal, .top])
-
-            VStack(alignment: .leading, spacing: 15) {
-                HStack {
-                    Text(item.title)
-                        .font(.title2)
-                        .bold()
-                    Spacer()
-                    Button(action: {
-                        item.isFavorite.toggle()
-                    }) {
-                        Image(systemName: item.isFavorite ? "star.fill" : "star")
-                            .foregroundColor(.orange)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                
-                HStack {
-                    Text("Автор: \(item.author)")
-                        .font(.caption)
-                    Spacer()
-                    Text(item.date)
-                        .font(.caption)
-                    Spacer()
-                    Text("Рейтинг: \(item.rating)")
-                        .font(.caption)
-                }
-                .foregroundColor(Color("Divider"))
-                
-
-                Divider()
-                    .frame(height: 2)
-                    .background((Color("Divider")))
-
-                Text("Комментарии:")
-                    .font(.body)
+                Text(item.title)
+                    .font(.title)
                     .bold()
-
-                CommentsView()
+                Spacer()
+                Button(action: {
+                    item.isFavorite.toggle()
+                }) {
+                    Image(systemName: item.isFavorite ? "star.fill" : "star")
+                        .foregroundColor(Color("Star"))
+                }
             }
-            .padding()
+            HStack {
+                Text("Автор: \(item.author)")
+                    .font(.subheadline)
+                Spacer()
+                Text("Дата: \(item.date)")
+                    .font(.subheadline)
+            }
+            .foregroundColor(.gray)
+            Text("Рейтинг: \(item.rating)")
+                .font(.subheadline)
+                .foregroundColor(Color("Main"))
+            NavigationLink(destination: CommentsView(storyId: storyId)) {
+                Text("Посмотреть комментарии")
+                    .padding()
+                    .background(Color("Main"))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            Spacer()
         }
-        .navigationBarBackButtonHidden(true)
+        .padding()
+        .navigationTitle("Детали новости")
     }
 }
 
+struct NewDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            NewDetailView(item: .constant(News(id: 1, title: "Новость 1", author: "Автор 1", date: "00.00.0001", rating: 5, isFavorite: false)), storyId: 1)
+        }
+    }
+}

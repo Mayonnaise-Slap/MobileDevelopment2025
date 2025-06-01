@@ -1,14 +1,9 @@
-//
-//  News.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 24.04.2025.
-//
+// News.swift
 
 import Foundation
 
 struct News: Identifiable {
-    let id = UUID()
+    let id: Int
     let title: String
     let author: String
     let date: String
