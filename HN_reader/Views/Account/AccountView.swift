@@ -1,14 +1,9 @@
-//
-//  AccountView.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 08.05.2025.
-//
-
+// AccountView.swift
 import SwiftUI
 
-
 struct AccountView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "person.crop.circle.fill")
@@ -17,19 +12,29 @@ struct AccountView: View {
                 .foregroundColor(Color("Main"))
                 .padding(.top, 40)
 
-            Text("Имя пользователя")
-                .font(.title2)
-                .bold()
+            if let user = authViewModel.currentUser {
+                Text(user.nickname)
+                    .font(.title2)
+                    .bold()
+            } else {
+                Text("Имя пользователя")
+                    .font(.title2)
+                    .bold()
+            }
 
             Divider()
                 .padding(.horizontal)
                 .frame(height: 2)
                 .background((Color("Divider")))
             
-
             VStack(alignment: .leading, spacing: 10) {
                 Label("Настройки", systemImage: "gear")
-                Label("Выход", systemImage: "rectangle.portrait.and.arrow.right")
+                
+                Button(action: {
+                    authViewModel.logout()
+                }) {
+                    Label("Выход", systemImage: "rectangle.portrait.and.arrow.right")
+                }
             }
             .padding(.horizontal)
             .foregroundColor(.primary)

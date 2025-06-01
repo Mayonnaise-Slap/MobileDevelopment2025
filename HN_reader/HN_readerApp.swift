@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct HN_readerApp: App {
-    var body: some Scene {
-        WindowGroup {
-            MainTabView()
+    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var appState = AppState(
+            isAuthenticated: UserDefaults.standard.string(forKey: "currentUserId") != nil
+        )
+    @AppStorage("isDarkMode") var isDarkMode = false
+        
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+                    .environmentObject(authViewModel)
+                    .environmentObject(appState)
+                    .preferredColorScheme(isDarkMode ? .dark : .light)
+            }
         }
     }
-}

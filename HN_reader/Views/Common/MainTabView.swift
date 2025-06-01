@@ -16,12 +16,16 @@ struct MainTabView: View {
                 }
             FavoritesView()
                 .tabItem {
-                    Label("Избранное", systemImage: "star.fill")
+                    Label("Избранное", systemImage: "newspaper")
                 }
             RecommendationsView()
                 .tabItem {
-                    Label("Рекомендации", systemImage: "hand.raised.fill")
+                    Label("Рекомендации", systemImage: "hand.thumbsup")
                 }
-        }
+            AccountView()
+                .tabItem {
+                    Label("Аккаунт", systemImage: "person.crop.circle")
+                }
+        }.tint(Color("Main"))
     }
 }

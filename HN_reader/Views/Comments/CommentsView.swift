@@ -17,8 +17,8 @@ struct CommentsView: View {
                 ProgressView("Загрузка комментариев...")
                     .progressViewStyle(CircularProgressViewStyle())
                     .padding()
-            } else if let error = errorMessage {
-                Text("Ошибка: \(error)")
+            } else if let errorMessage {
+                Text("Ошибка: \(errorMessage)")
                     .foregroundColor(.red)
                     .padding()
             } else if comments.isEmpty {
@@ -29,7 +29,7 @@ struct CommentsView: View {
                 ScrollView {
                     VStack(spacing: 15) {
                         ForEach($comments) { $item in
-                            CommentsRowView(item: $item)
+                            CommentsRowView(item: item)
                         }
                     }
                     .padding()

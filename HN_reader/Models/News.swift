@@ -9,4 +9,5 @@ struct News: Identifiable {
     let date: String
     let rating: Int
     var isFavorite: Bool
+    let url: String?
 }

@@ -1,16 +1,26 @@
+//
+//  ContentView.swift
+//  HN_reader
+//
+//  Created by MpAsSgHA on 24.04.2025.
+//
+
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var appState: AppState
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                AuthView() // без передачи viewModel напрямую!
-                Divider().padding(.vertical)
-                NewsView()
+        Group {
+            if appState.isAuthenticated {
+                MainTabView()
+            } else {
+                AuthView()
             }
-            .navigationTitle("Главная")
         }
-        .environmentObject(authViewModel) // <- ключевая строка!
+        .onChange(of: authViewModel.currentUser) { user in
+            appState.isAuthenticated = (user != nil)
+        }
     }
 }

@@ -1,14 +1,8 @@
-//
-//  AuthView.swift
-//  HN_reader
-//
-//  Created by MpAsSgHA on 24.05.2025.
-//
-
 import SwiftUI
 
 struct AuthView: View {
     @EnvironmentObject var viewModel: AuthViewModel
+    @EnvironmentObject var appState: AppState
     @State private var isLoggedIn = false
     
     var body: some View {
@@ -16,40 +10,37 @@ struct AuthView: View {
             GeometryReader { geometry in
                 VStack {
                     Spacer()
+                    
+                    Image("HN_logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200)
 
                     VStack(spacing: 20) {
-                        Text(viewModel.isLogin ? "Вход" : "Регистрация")
-                            .font(.largeTitle)
-                            .bold()
 
                         TextField("Email", text: $viewModel.email)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
-                            .textInputAutocapitalization(.never)
 
                         if !viewModel.isLogin {
                             TextField("Nickname", text: $viewModel.nickname)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .autocapitalization(.none)
-                                .textInputAutocapitalization(.never)
                         }
 
                         SecureField("Password", text: $viewModel.password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
 
                         Button(action: {
-                            if viewModel.isLogin {
-                                viewModel.login()
-                                if viewModel.success {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        isLoggedIn = true
+                                    if viewModel.isLogin {
+                                        if viewModel.login() {
+                                            appState.isAuthenticated = true
+                                        }
+                                    } else {
+                                        viewModel.register()
                                     }
-                                }
-                            } else {
-                                viewModel.register()
-                            }
-                        }) {
+                                }) {
                             Text(viewModel.isLogin ? "Войти" : "Зарегистрироваться")
                                 .frame(maxWidth: .infinity)
                                 .padding()
@@ -59,6 +50,7 @@ struct AuthView: View {
                         }
                         .fullScreenCover(isPresented: $isLoggedIn) {
                             MainTabView()
+                                .environmentObject(viewModel)
                         }
 
                         if !viewModel.message.isEmpty {
@@ -85,6 +77,11 @@ struct AuthView: View {
                     Spacer()
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+        }
+        .onAppear {
+            if viewModel.currentUser != nil {
+                isLoggedIn = true
             }
         }
     }
