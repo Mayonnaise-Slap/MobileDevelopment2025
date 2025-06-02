@@ -5,6 +5,7 @@ from app.db.session import get_session
 from app.task_manager.hn_client import get_new_stories, parse_item_array
 from app.task_manager.utils import get_http_client
 from app.task_manager.utils import insert_item, upsert_lists
+from app.repository import ProjectRepository
 
 
 @celery_app.task
@@ -37,3 +38,13 @@ def fetch_and_store_top_stories():
             await insert_item(item, session)
 
     asyncio.run(_fetch_and_store_top_stories())
+
+
+@celery_app.task
+def fetch_story_comments(story_id):
+    async def _fetch_story_comments(story_id):
+        session = await anext(get_session())
+
+        return await ProjectRepository().load_thread(session, story_id)
+
+    asyncio.run(_fetch_story_comments(story_id))

@@ -1,13 +1,16 @@
 from contextlib import asynccontextmanager
 
+from celery.result import AsyncResult
 from fastapi import APIRouter, Depends
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.celery_worker import celery_app
 from app.db.session import get_session, init_db
 from app.repository import ProjectRepository
+from app.task_manager.tasks import fetch_story_comments
 
 
 @asynccontextmanager
@@ -51,7 +54,20 @@ async def get_new_stories(session: AsyncSession = Depends(get_session)):
     return await ProjectRepository().get_new_stories(session)
 
 
-# TODO add list views for posts to optimize db connections
-# TODO add fun stuff
+@app.post("/start_task/{story_id}")
+def start_task(story_id: int):
+    task = fetch_story_comments.delay(story_id)
+    return {"task_id": task.id}
+
+
+@app.get("/task_status/{task_id}")
+def get_status(task_id: str):
+    result = AsyncResult(task_id, app=celery_app)
+    return {
+        "task_id": task_id,
+        "status": result.status,
+        "result": result.result if result.ready() else None,
+    }
+
 
 app.include_router(router_v1)
