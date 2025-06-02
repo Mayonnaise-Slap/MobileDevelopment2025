@@ -75,6 +75,19 @@ def get_status(task_id: str):
     }
 
 
+@celery_router.post("/wait_for_task/{story_id}")
+def wait_for_task(story_id: int):
+    task = fetch_story_comments.delay(story_id)
+
+    result = task.get()
+
+    return {
+        "task_id": task.id,
+        "status": task.status,
+        "result": result
+    }
+
+
 lab_2_router = APIRouter(prefix="/lab2", tags=["lab-2"])
 
 
